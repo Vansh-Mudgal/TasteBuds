@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "726338798241",
+    "project_id": "taste-buds-55d43",
+    "storage_bucket": "taste-buds-55d43.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726338798241:android:751346cb96a2fdaa3226e0",
+        "android_client_info": {
+          "package_name": "com.example.tastebuds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzX8D2pDGeZ-vYtY65uDUTAsvhYdNfZ_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
