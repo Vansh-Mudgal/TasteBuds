@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 
 class InfoViewModel : ViewModel() {
 
-    private val itemInfo = MutableLiveData<HomeViewModel>()
+    private val itemInfo = MutableLiveData<CartViewModel>()
 
-    fun setData(itemData : HomeViewModel){
+    fun setData(itemData : CartViewModel){
         itemInfo.value = itemData
     }
-    fun getData() : LiveData<HomeViewModel>{
+    fun getData() : LiveData<CartViewModel>{
         return itemInfo
     }
 }

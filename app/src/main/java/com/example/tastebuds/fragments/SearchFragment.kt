@@ -1,5 +1,6 @@
 package com.example.tastebuds.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,24 +10,28 @@ import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tastebuds.FoodMenu
 import com.example.tastebuds.HomeViewModel
 import com.example.tastebuds.InfoViewModel
 import com.example.tastebuds.R
-import com.example.tastebuds.adapter.MenuBottomSheetAdapter
+import com.example.tastebuds.RestaurantMenu
+import com.example.tastebuds.RestaurantViewModel
+import com.example.tastebuds.adapter.HomeAdapter
 import com.example.tastebuds.databinding.FragmentSearchBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var searchAdapter : MenuBottomSheetAdapter
+    private lateinit var searchAdapter : HomeAdapter
+    private lateinit var firestoreDB : FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
 
-    private var itemList = ArrayList<HomeViewModel>()
+    private var itemList = ArrayList<RestaurantViewModel>()
+    private var restaurantList = ArrayList<RestaurantViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +39,26 @@ class SearchFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater, container, false)
+        firestoreDB = FirebaseFirestore.getInstance()
+        val infoModel = ViewModelProvider(requireActivity())[InfoViewModel::class.java]
 
-        val infoModel = ViewModelProvider(requireActivity()).get(InfoViewModel::class.java)
+        searchAdapter = HomeAdapter(itemList, this){ selectedItem ->
+            val intent = Intent(requireContext(), RestaurantMenu::class.java)
+            intent.putExtra("id", selectedItem.restName)
+            intent.putExtra("rating", selectedItem.rating)
+            startActivity(intent)
+        }
 
-        itemList.addAll(FoodMenu.getData())
-        searchAdapter = MenuBottomSheetAdapter(itemList, infoModel, this)
+        val restaurants = firestoreDB.collection("restaurants")
+        restaurants.get().addOnSuccessListener { restaurant ->
+            itemList.clear()
+            for(single in restaurant){
+                itemList.add(RestaurantViewModel(single.id, single.getDouble("rating") ?: 0.0, single.getString("restImage") ?: ""))
+            }
+            restaurantList = ArrayList(itemList)
+            searchAdapter.notifyDataSetChanged()
+        }
+
         binding.searchRecView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.searchRecView.adapter = searchAdapter
 
@@ -64,8 +84,8 @@ class SearchFragment : Fragment() {
 
     private fun filterMenuItems(query: String) {
         itemList.clear()
-        FoodMenu.getData().forEachIndexed{index, item ->
-            if(item.foodName.contains(query, ignoreCase = true)){
+        restaurantList.forEachIndexed{index, item ->
+            if(item.restName.contains(query, ignoreCase = true)){
                 itemList.add(item)
             }
         }

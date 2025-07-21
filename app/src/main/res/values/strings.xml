@@ -3,4 +3,5 @@
     <string name="location_Screen_text">To provide you with the best dining experience, we need your permission to access your device\'s location. By enabling location services, we can offer personalized restaurant recommendations, accurate delivery estimates, and ensure a seamless food delivery experience."</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="web_client_ID">726338798241-321m6k5lb7164js1ug59msf3ujpoduq7.apps.googleusercontent.com</string>
 </resources>

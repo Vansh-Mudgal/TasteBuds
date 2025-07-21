@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -52,9 +54,18 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+    implementation(libs.firebase.database)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     //image slider
-    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
+    implementation (libs.imageslideshow)
+    //glide
+    implementation(libs.glide)
+    // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
+    annotationProcessor(libs.compiler)
+    //custom toast
+    implementation (libs.fancytoast)
 }
