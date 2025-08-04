@@ -68,4 +68,6 @@ dependencies {
     annotationProcessor(libs.compiler)
     //custom toast
     implementation (libs.fancytoast)
+    //razorpay
+    implementation("com.razorpay:checkout:1.6.40")
 }

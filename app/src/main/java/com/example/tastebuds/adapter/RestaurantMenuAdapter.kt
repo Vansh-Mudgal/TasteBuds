@@ -30,6 +30,11 @@ class RestaurantMenuAdapter(private val dishes : ArrayList<CartViewModel>, priva
             val infoBottomSheet = FoodInfoBottomSheetFragment()
             infoBottomSheet.show(fragmentManager, "Hello")
         }
+        holder.binding.menuAddToCartButton.setOnClickListener {
+            infoModel.setData(item)
+            val infoBottomSheet = FoodInfoBottomSheetFragment()
+            infoBottomSheet.show(fragmentManager, "Hello")
+        }
     }
 
     inner class RestaurantMenuViewHolder(val binding : MenurvitemBinding) : RecyclerView.ViewHolder(binding.root){

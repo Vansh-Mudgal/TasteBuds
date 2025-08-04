@@ -39,7 +39,7 @@ class LoginScreen : AppCompatActivity() {
         //log in with google start
         val scope = CoroutineScope(Dispatchers.Main)
         val login : (String, String) -> Unit = { username, email ->
-            val user = UserModel(username, email, "", "", "")
+            val user = UserModel(username, email, "", "", "", "", "")
             auth.uid?.let { database.child("user").child(it).setValue(user) }
             startActivity(Intent(this, MainActivity::class.java))
             finish()

@@ -2,6 +2,7 @@ package com.example.tastebuds
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,8 +42,8 @@ class SignUpScreen : AppCompatActivity() {
         //sign in with google start
         val scope = CoroutineScope(Dispatchers.Main)
         val login : (String, String) -> Unit = { username, email ->
-            val user = UserModel(username, email, "", "", "")
-            auth.uid?.let { database.child("user").child(it).setValue(user) }
+            val user = UserModel(username, email, "", "", "", "", "")
+            auth.uid?.let { database.child("user").child(it).setValue(user)}
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
@@ -85,7 +86,7 @@ class SignUpScreen : AppCompatActivity() {
             if(work.isSuccessful) {
                 Toast.makeText(this, "User Created Successfully", Toast.LENGTH_SHORT).show()
                 saveUserData()
-                val intent = Intent(this, LocationScreen::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -96,7 +97,7 @@ class SignUpScreen : AppCompatActivity() {
     }
 
     private fun saveUserData() {
-        val user = UserModel(userName, email, password, "", "")
+        val user = UserModel(userName, email, password, "", "", "", "")
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         database.child("user").child(userId).setValue(user)
     }
