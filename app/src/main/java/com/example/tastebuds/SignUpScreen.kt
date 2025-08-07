@@ -44,7 +44,7 @@ class SignUpScreen : AppCompatActivity() {
         val login : (String, String) -> Unit = { username, email ->
             val user = UserModel(username, email, "", "", "", "", "")
             auth.uid?.let { database.child("user").child(it).setValue(user)}
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, LocationScreen::class.java))
             finish()
             Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
         }
@@ -86,7 +86,7 @@ class SignUpScreen : AppCompatActivity() {
             if(work.isSuccessful) {
                 Toast.makeText(this, "User Created Successfully", Toast.LENGTH_SHORT).show()
                 saveUserData()
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, LocationScreen::class.java)
                 startActivity(intent)
                 finish()
             }

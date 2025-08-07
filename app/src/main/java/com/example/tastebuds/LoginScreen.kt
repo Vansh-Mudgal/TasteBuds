@@ -41,7 +41,7 @@ class LoginScreen : AppCompatActivity() {
         val login : (String, String) -> Unit = { username, email ->
             val user = UserModel(username, email, "", "", "", "", "")
             auth.uid?.let { database.child("user").child(it).setValue(user) }
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, LocationScreen::class.java))
             finish()
             Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
         }
@@ -91,7 +91,7 @@ class LoginScreen : AppCompatActivity() {
         private fun loginUser(email: String, password: String) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, LocationScreen::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show()
