@@ -69,5 +69,8 @@ dependencies {
     //custom toast
     implementation (libs.fancytoast)
     //razorpay
-    implementation("com.razorpay:checkout:1.6.40")
+    implementation(libs.checkout)
+    //google maps
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 }

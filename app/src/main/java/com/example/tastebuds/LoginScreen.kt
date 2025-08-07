@@ -83,7 +83,7 @@ class LoginScreen : AppCompatActivity() {
             super.onStart()
             val currentUser = auth.currentUser
             if (currentUser != null) {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, LocationScreen::class.java))
                 finish()
             }
         }

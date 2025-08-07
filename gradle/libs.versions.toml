@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.1"
+checkout = "1.6.41"
 fancytoast = "2.0.2"
 glide = "4.16.0"
 imageslideshow = "0.1.2"
@@ -23,9 +24,11 @@ firebaseDatabase = "21.0.0"
 playServicesAuth = "21.3.0"
 activityCompose = "1.10.1"
 firebaseFirestore = "25.1.4"
+playServicesMaps = "19.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+checkout = { module = "com.razorpay:checkout", version.ref = "checkout" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 fancytoast = { module = "io.github.shashank02051997:FancyToast", version.ref = "fancytoast" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -47,6 +50,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesAuth" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
