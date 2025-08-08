@@ -48,7 +48,7 @@ class PlaceOrderActivity : AppCompatActivity(), PaymentResultListener {
         co.setKeyID("rzp_test_gD1mlTgDekUgL8")
         //razorpay sub end
 
-        price = intent.getIntExtra("total", 0).toString()
+        price = intent.getLongExtra("total", 0).toString()
         // getting data based on API level (33 or below)
         foodData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableArrayListExtra("foodData", CartViewModel::class.java)?:arrayListOf()

@@ -9,4 +9,5 @@ data class CartViewModel(
     val price : Long?,
     val image : String?,
     val restName : String?,
-    val foodId : String) : Parcelable
+    val foodId : String,
+    var quantity : Long?) : Parcelable

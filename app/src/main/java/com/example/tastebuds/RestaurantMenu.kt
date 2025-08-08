@@ -32,7 +32,7 @@ class RestaurantMenu : AppCompatActivity() {
         restaurantFood.get().addOnSuccessListener { menuItems ->
             dishes.clear()
             for(dish in menuItems){
-                dishes.add(CartViewModel(dish.getString("foodname"), dish.getLong("price"), dish.getString("image"), id, dish.id))
+                dishes.add(CartViewModel(dish.getString("foodname"), dish.getLong("price"), dish.getString("image"), id, dish.id, 1))
             }
             restaurantMenuAdapter.notifyDataSetChanged()
         }

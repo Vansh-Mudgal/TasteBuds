@@ -19,7 +19,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class CartFragment : Fragment() {
     private lateinit var bindingCart : FragmentCartBinding
     private lateinit var cartList : ArrayList<CartViewModel>
-    private lateinit var quantityList : MutableList<Int>
     private lateinit var db : FirebaseFirestore
     private lateinit var cartAdapter: CartAdapter
 
@@ -33,7 +32,6 @@ class CartFragment : Fragment() {
     ): View? {
         bindingCart = FragmentCartBinding.inflate(inflater, container, false)
         cartList = ArrayList()
-        quantityList = ArrayList()
         bindingCart.emptyCartImage.visibility = View.INVISIBLE
         bindingCart.cartProceedButton.alpha = 0.5f
         return bindingCart.root
@@ -47,7 +45,7 @@ class CartFragment : Fragment() {
 
         auth.uid?.let { db.collection("UserMenu").document(it).get().addOnSuccessListener { userArray ->
             cartList.clear()
-            quantityList.clear()
+            //quantityList.clear()
             val itemValues = userArray.data?.values?.filterIsInstance<Map<*, *>>() ?: emptyList()
             if(!userArray.exists() || itemValues.isEmpty()){
                 bindingCart.emptyCartImage.visibility = View.VISIBLE
@@ -58,16 +56,15 @@ class CartFragment : Fragment() {
                     val foodName = value["foodName"].toString()
                     val restName = value["restaurantName"].toString()
                     val foodID = value["foodID"].toString()
-                    val quantity = value["quantity"].toString().toIntOrNull() ?: 1
-                    quantityList.add(quantity)
+                    val quantity = value["quantity"].toString().toLongOrNull() ?: 1
                     db.collection("restaurants").document(restName).collection("menu").document(foodID).get().addOnSuccessListener { myData ->
-                        cartList.add(CartViewModel(foodName, myData.getLong("price"), myData.getString("image"), restName, foodID))
+                        cartList.add(CartViewModel(foodName, myData.getLong("price"), myData.getString("image"), restName, foodID, quantity))
                         loadedCount++
                         if (loadedCount == itemValues.size) {
                             if(cartList.isNotEmpty()){
                                 bindingCart.cartProceedButton.alpha = 1.0f
                                 bindingCart.emptyCartImage.visibility = View.GONE
-                                cartAdapter = CartAdapter(cartList, quantityList)
+                                cartAdapter = CartAdapter(cartList, bindingCart)
                                 bindingCart.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                                 bindingCart.recyclerView.adapter = cartAdapter
                                 cartAdapter.notifyDataSetChanged()
@@ -80,9 +77,9 @@ class CartFragment : Fragment() {
         bindingCart.cartProceedButton.setOnClickListener{
             if(bindingCart.cartProceedButton.alpha == 1.0f) {
                 val intent = Intent(requireContext(), PlaceOrderActivity::class.java)
-                var totalSum = 0
+                var totalSum = 0L
                 for(i in 0 until cartList.size){
-                    totalSum += (cartList[i].price.toString().toIntOrNull() ?: 0) * quantityList[i]
+                    totalSum += (cartList[i].price.toString().toIntOrNull() ?: 0) * cartList[i].quantity!!
                 }
                 intent.putExtra("total", totalSum)
                 intent.putParcelableArrayListExtra("foodData", cartList)

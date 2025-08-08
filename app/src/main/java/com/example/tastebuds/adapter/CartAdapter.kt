@@ -1,18 +1,19 @@
 package com.example.tastebuds.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tastebuds.CartViewModel
-import com.example.tastebuds.HomeViewModel
 import com.example.tastebuds.databinding.CartRvItemBinding
+import com.example.tastebuds.databinding.FragmentCartBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
-class CartAdapter(var cartList : MutableList<CartViewModel>, private var quantityList : MutableList<Int>) : RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
+class CartAdapter(var cartList : MutableList<CartViewModel>, val cartBinding: FragmentCartBinding) : RecyclerView.Adapter<CartAdapter.CartViewHolder>(){
 
     val db = FirebaseFirestore.getInstance()
 
@@ -31,7 +32,7 @@ class CartAdapter(var cartList : MutableList<CartViewModel>, private var quantit
         holder.binding.foodInCartName.text = listItem.foodName
         holder.binding.priceInCart.text = itemPrice
         Glide.with(holder.binding.root).load(listItem.image).into(holder.binding.imageView7)
-        holder.binding.itemQuantity.text = quantityList[position].toString()
+        holder.binding.itemQuantity.text = listItem.quantity.toString()
         holder.binding.cartRestName.text = listItem.restName
         holder.bind(position)
     }
@@ -51,29 +52,32 @@ class CartAdapter(var cartList : MutableList<CartViewModel>, private var quantit
             }
         }
         private fun increase(position : Int){
-            if(quantityList[position] < 10){
-                quantityList[position]++
+            if(cartList[position].quantity!! < 10){
+                cartList[position].quantity = cartList[position].quantity!! + 1
                 val itemData = cartList[position]
-                binding.itemQuantity.text = quantityList[position].toString()
-                Firebase.auth.uid?.let { db.collection("UserMenu").document(it).update(mapOf("${itemData.foodName}"+"${itemData.restName}.quantity" to quantityList[position])) }
+                binding.itemQuantity.text = cartList[position].quantity.toString()
+                Firebase.auth.uid?.let { db.collection("UserMenu").document(it).update(mapOf("${itemData.foodName}"+"${itemData.restName}.quantity" to cartList[position].quantity)) }
             }
         }
         private fun decrease(position : Int){
-            if(quantityList[position] > 1){
-                quantityList[position]--
+            if(cartList[position].quantity!! > 1){
+                cartList[position].quantity = cartList[position].quantity!! - 1
                 val itemData = cartList[position]
-                binding.itemQuantity.text = quantityList[position].toString()
-                Firebase.auth.uid?.let { db.collection("UserMenu").document(it).update(mapOf("${itemData.foodName}"+"${itemData.restName}.quantity" to quantityList[position])) }
+                binding.itemQuantity.text = cartList[position].quantity.toString()
+                Firebase.auth.uid?.let { db.collection("UserMenu").document(it).update(mapOf("${itemData.foodName}"+"${itemData.restName}.quantity" to cartList[position].quantity)) }
             }
         }
         private fun deleteItem(position : Int){
             val itemData = cartList[position]
             val updates = mapOf(itemData.foodName+itemData.restName to FieldValue.delete())
             cartList.removeAt(position)
-            quantityList.removeAt(position)
             Firebase.auth.uid?.let { db.collection("UserMenu").document(it).update(updates) }
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, cartList.size)
+            if(cartList.isEmpty()){
+                cartBinding.cartProceedButton.alpha = 0.5f
+                cartBinding.emptyCartImage.visibility = View.VISIBLE
+            }
         }
     }
 }

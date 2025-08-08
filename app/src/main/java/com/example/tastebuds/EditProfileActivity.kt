@@ -1,5 +1,6 @@
 package com.example.tastebuds
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -158,6 +159,7 @@ class EditProfileActivity : AppCompatActivity() {
                     FancyToast.makeText(this,"Updated",
                         FancyToast.LENGTH_SHORT,
                         FancyToast.SUCCESS,true).show()
+                    startActivity(Intent(this, MainActivity::class.java))
                 } }
             }
         }
