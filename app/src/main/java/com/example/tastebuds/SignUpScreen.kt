@@ -12,10 +12,12 @@ import com.example.tastebuds.databinding.ActivitySignUpScreenBinding
 import com.example.tastebuds.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -84,14 +86,19 @@ class SignUpScreen : AppCompatActivity() {
     private fun createUser(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ work ->
             if(work.isSuccessful) {
-                Toast.makeText(this, "User Created Successfully", Toast.LENGTH_SHORT).show()
+                FancyToast.makeText(this, "User Created Successfully", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show()
                 saveUserData()
                 val intent = Intent(this, LocationScreen::class.java)
                 startActivity(intent)
                 finish()
             }
             else{
-                Toast.makeText(this, "Error : User not created", Toast.LENGTH_SHORT).show()
+                var exp = work.exception
+                if(exp is FirebaseAuthUserCollisionException){
+                    FancyToast.makeText(this, "User Already Exists", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show()
+                }else{
+                    FancyToast.makeText(this, "Error: ${exp?.message}", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show()
+                }
             }
         }
     }

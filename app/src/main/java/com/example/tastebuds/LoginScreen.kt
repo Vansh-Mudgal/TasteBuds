@@ -10,11 +10,11 @@ import com.example.tastebuds.databinding.ActivityLoginScreenBinding
 import com.example.tastebuds.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
-import com.google.firebase.firestore.FirebaseFirestore
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -68,7 +68,7 @@ class LoginScreen : AppCompatActivity() {
             email = binding.loginEmail.text.toString().trim()
             password = binding.loginPassword.text.toString().trim()
             if (email.isBlank() || password.isBlank()) {
-                Toast.makeText(this, "Please Fill All The Details", Toast.LENGTH_SHORT).show()
+                FancyToast.makeText(this, "Please Fill All The Details", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show()
             } else {
                 loginUser(email, password)
             }
@@ -94,7 +94,13 @@ class LoginScreen : AppCompatActivity() {
                     startActivity(Intent(this, LocationScreen::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                    val exception = task.exception
+                    if (exception is FirebaseAuthInvalidUserException) {
+                        FancyToast.makeText(this,"No Such User Found", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show()
+                    } else {
+                        FancyToast.makeText(this,"Error: ${exception?.message}", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show()
+                    }
+
                 }
             }
         }
