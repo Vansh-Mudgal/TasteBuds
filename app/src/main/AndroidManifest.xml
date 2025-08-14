@@ -54,10 +54,10 @@
         </activity>
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_gD1mlTgDekUgL8"/>
+            android:value="YOUR API KEY"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDo5cFkS10mjTNYrOecepvTQ36HPJi3Ck0" />
+            android:value="YOUR API KEY" />
     </application>
 
 </manifest>
